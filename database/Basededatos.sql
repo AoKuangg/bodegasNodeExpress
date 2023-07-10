@@ -20,7 +20,7 @@ CREATE TABLE users(
 
 CREATE TABLE bodegas(
     id BIGINT(20) UNSIGNED NOT NULl PRIMARY KEY,
-    nombre VARCHAR(255) NOT NULL,
+    nombre VARCHAR(255) NOT NULL UNIQUE,
     id_responsable BIGINT(20) UNSIGNED NOT NULL,
     estado TINYINT(4),
     created_by BIGINT(20) UNSIGNED,
