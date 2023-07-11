@@ -34,4 +34,38 @@ appBodegas.get("/",(req, res) => {
     });
 });
 
-export default appBodegas
+
+
+appBodegas.post("/",(req, res)=>{
+    const {id,nombre,id_responsable,estado,created_by} = req.body;
+    if (!id || !nombre || !id_responsable || !estado || !created_by) {
+        return res.status(400).send("Faltan datos de entrada");
+    }
+    con.query(
+        `SELECT id FROM users WHERE id = ?`,
+        [id_responsable],(error,results) => {
+            if (error) {
+                console.log(error);
+                res.status(500).send("Error executing query");
+            } else if(results.length ===0){
+                res.status(500).send("Error the user doesn't exist in the users table")
+            }else{
+                con.query(
+                    `INSERT INTO bodegas (id, nombre, id_responsable, estado, created_by) VALUES (?, ?, ?, ?, ?)`,
+                    (error, results) => {
+                        if (error){
+                            console.log(error);
+                            res.status(500).send("Error executing query");
+                        }else{
+                            console.log(results);
+                            res.status(200).send("New Bodega added successfully")
+                        }
+                    }
+                )
+            }
+        });
+});
+
+
+
+export default appBodegas;
