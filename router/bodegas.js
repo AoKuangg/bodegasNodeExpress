@@ -36,35 +36,40 @@ appBodegas.get("/",(req, res) => {
 
 
 
-appBodegas.post("/",(req, res)=>{
-    const {id,nombre,id_responsable,estado,created_by} = req.body;
-    if (!id || !nombre || !id_responsable || !estado || !created_by) {
-        return res.status(400).send("Faltan datos de entrada");
+appBodegas.post("/", (req, res) => {
+    const { id, nombre, id_responsable, estado, created_by, created_at } = req.body;
+  
+    // Validar si los campos requeridos están presentes
+    if (!id || !nombre || !id_responsable || !estado || !created_by ||!created_at) {
+      return res.status(400).send("Faltan datos de entrada");
     }
+  
     con.query(
-        `SELECT id FROM users WHERE id = ?`,
-        [id_responsable],(error,results) => {
-            if (error) {
+      `SELECT id FROM users WHERE id = ?`,
+      [id_responsable],
+      (error, deriva) => {
+        if (error) {
+          res.status(500).send("Error connection rejected");
+        } else if (deriva.length === 0) {
+          res.status(500).send("Error: el usuario no existe en la tabla de usuarios");
+        } else {
+          con.query(
+            `INSERT INTO bodegas (id, nombre, id_responsable, estado, created_by,created_at) VALUES (?, ?, ?, ?, ?, ?)`,
+            [id, nombre, id_responsable, estado, created_by,created_at],
+            (error, results) => {
+              if (error) {
                 console.log(error);
                 res.status(500).send("Error executing query");
-            } else if(results.length ===0){
-                res.status(500).send("Error the user doesn't exist in the users table")
-            }else{
-                con.query(
-                    `INSERT INTO bodegas (id, nombre, id_responsable, estado, created_by) VALUES (?, ?, ?, ?, ?)`,
-                    (error, results) => {
-                        if (error){
-                            console.log(error);
-                            res.status(500).send("Error executing query");
-                        }else{
-                            console.log(results);
-                            res.status(200).send("New Bodega added successfully")
-                        }
-                    }
-                )
+              } else {
+                console.log(results);
+                res.status(200).send("Nueva bodega agregada exitosamente");
+              }
             }
-        });
-});
+          );
+        }
+      }
+    );
+  });
 
 
 
