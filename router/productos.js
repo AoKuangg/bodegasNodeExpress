@@ -33,4 +33,46 @@ appProductos.get("/",(req,res)=>{
     })
 });
 
+appProductos.post("/", (req, res) => {
+    const { id,nombre,  descripcion,cantidad ,id_inv} = req.body;
+    con.query(
+      "INSERT INTO productos (id, nombre, descripcion) VALUES (?,?, ?)",
+      [id,nombre,  descripcion],
+      (err, result) => {
+        if (err) {
+          console.error(err);
+          res.status(500).send("Internal Server Error");
+        } else {
+          const  id_producto = id;
+          con.query(
+            "SELECT id FROM bodegas WHERE nombre = ?",
+            ["bodega0"],
+            (err, result) => {
+              if (err) {
+                console.error(err);
+                res.status(500).send("Internal Server Error");
+              } else {
+                const  id_bodega = result[0].id;
+                con.query(
+                  "INSERT INTO inventarios ( id,id_producto,  id_bodega, cantidad) VALUES (?, ?, ?,?)",
+                  [ id_inv,id_producto,  id_bodega, cantidad],
+                  (err) => {
+                    if (err) {
+                      console.error(err);
+                      res.status(500).send("Internal Server Error");
+                    } else {
+                      res.status(200).send("Producto insertado correctamente");
+                    }
+                  }
+                );
+              }
+            }
+          );
+        }
+      }
+    );
+  });
+
+
+
 export default appProductos;
