@@ -1,6 +1,7 @@
 import {Router} from "express";
 import mysql from "mysql2";
 import dotenv from "dotenv";
+import DtoInventario from "../Middleware/DTOInventario";
 const appInventarios = Router();
 dotenv.config();
 
@@ -16,7 +17,7 @@ appInventarios.use((req,res,next)=>{
 });
 
 
-appInventarios.post('/', (req, res) => {
+appInventarios.post('/', DtoInventario,(req, res) => {
     const { id,id_producto, id_bodega, cantidad } = req.body;
   
     con.query(
