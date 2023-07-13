@@ -5,16 +5,11 @@ const appBodegas = Router();
 dotenv.config();
 
 let con = undefined;
-appBodegas.use((req,res,next)=>{
+appProductos.use((req,res,next)=>{
     try {
-        con = mysql.createPool({
-            host: process.env.HOST,
-            user:process.env.USUARIO,
-            password: process.env.PASSWORD,
-            database: process.env.DATABASE,
-            port: process.env.PORT,
-        });
-        next();
+      let config_con = JSON.parse(process.env.CONECTION);
+      con = mysql.createPool(config_con);
+      next();
     } catch (error) {
         res.status(500).send("Connection error")
     }
