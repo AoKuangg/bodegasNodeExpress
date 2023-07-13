@@ -1,11 +1,15 @@
 import {Router} from "express";
 import mysql from "mysql2";
 import dotenv from "dotenv";
+import DtoBodega from "../Middleware/DTOBodega.js";
 const appBodegas = Router();
 dotenv.config();
 
+
+appBodegas.use("/", DtoBodega)
+
 let con = undefined;
-appProductos.use((req,res,next)=>{
+appBodegas.use((req,res,next)=>{
     try {
       let config_con = JSON.parse(process.env.CONECTION);
       con = mysql.createPool(config_con);
@@ -16,7 +20,7 @@ appProductos.use((req,res,next)=>{
 });
 
 
-appBodegas.get("/",(req, res) => {
+appBodegas.get("/",DtoBodega,(req, res) => {
     con.query(
         /*sql*/`SELECT * FROM bodegas ORDER BY nombre ASC`, (error,data,fields)=>{
             if(error){
@@ -31,7 +35,7 @@ appBodegas.get("/",(req, res) => {
 
 
 
-appBodegas.post("/", (req, res) => {
+appBodegas.post("/", DtoBodega,(req, res) => {
     const { id, nombre, id_responsable, estado, created_by, created_at } = req.body;
   
     // Validar si los campos requeridos están presentes

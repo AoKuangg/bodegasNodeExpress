@@ -5,7 +5,7 @@ const appInventarios = Router();
 dotenv.config();
 
 let con = undefined;
-appProductos.use((req,res,next)=>{
+appInventarios.use((req,res,next)=>{
     try {
       let config_con = JSON.parse(process.env.CONECTION);
       con = mysql.createPool(config_con);

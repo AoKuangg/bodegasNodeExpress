@@ -7,9 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Type, Transform, Expose } from "class-transformer";
-export class bodegas {
-    constructor(id, nombre, id_responsable, estado, created_by, updated_by, created_at) {
+import { Expose, Type, Transform } from "class-transformer";
+export class Bodega {
+    constructor(id, nombre, id_responsable, estado, created_by, updated_by, created_at, updated_at, deleted_at) {
         this.id = id;
         this.nombre = nombre;
         this.id_responsable = id_responsable;
@@ -17,6 +17,8 @@ export class bodegas {
         this.created_by = created_by;
         this.updated_by = updated_by;
         this.created_at = created_at;
+        this.updated_at = updated_at;
+        this.deleted_at = deleted_at;
     }
 }
 __decorate([
@@ -24,7 +26,7 @@ __decorate([
     Transform(({ value }) => { if (Math.floor(value) && typeof value == "number")
         return Math.floor(value); }, { toClassOnly: true }),
     __metadata("design:type", Number)
-], bodegas.prototype, "id", void 0);
+], Bodega.prototype, "id", void 0);
 __decorate([
     Expose({ name: "nombre" }),
     Transform(({ value }) => { if (/^[a-z A-Z]+$/.test(value))
@@ -32,31 +34,41 @@ __decorate([
     else
         throw { status: 400, message: `Error, el dato nombre no es valido` }; }),
     __metadata("design:type", String)
-], bodegas.prototype, "nombre", void 0);
+], Bodega.prototype, "nombre", void 0);
 __decorate([
     Expose({ name: "id_responsable" }),
     Transform(({ value }) => { if (Math.floor(value) && typeof value == "number")
         return Math.floor(value); }, { toClassOnly: true }),
     __metadata("design:type", Number)
-], bodegas.prototype, "id_responsable", void 0);
+], Bodega.prototype, "id_responsable", void 0);
 __decorate([
     Expose({ name: "estado" }),
     Transform(({ value }) => { if (Math.floor(value) && typeof value == "number")
         return Math.floor(value); }, { toClassOnly: true }),
     __metadata("design:type", Number)
-], bodegas.prototype, "estado", void 0);
+], Bodega.prototype, "estado", void 0);
 __decorate([
     Expose({ name: "created_by" }),
     Type(() => String),
     __metadata("design:type", String)
-], bodegas.prototype, "created_by", void 0);
+], Bodega.prototype, "created_by", void 0);
 __decorate([
     Expose({ name: "updated_by" }),
     Type(() => String),
     __metadata("design:type", String)
-], bodegas.prototype, "updated_by", void 0);
+], Bodega.prototype, "updated_by", void 0);
 __decorate([
     Expose({ name: "created_at" }),
     Type(() => String),
     __metadata("design:type", String)
-], bodegas.prototype, "created_at", void 0);
+], Bodega.prototype, "created_at", void 0);
+__decorate([
+    Expose({ name: "updated_at" }),
+    Type(() => String),
+    __metadata("design:type", String)
+], Bodega.prototype, "updated_at", void 0);
+__decorate([
+    Expose({ name: "deleted_at" }),
+    Type(() => String),
+    __metadata("design:type", String)
+], Bodega.prototype, "deleted_at", void 0);

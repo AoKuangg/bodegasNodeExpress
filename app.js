@@ -9,7 +9,7 @@ const expressapp = express();
 
 expressapp.use(express.json());
 
-expressapp.use("/bodega",appBodegas);
+expressapp.use("/bodegas",appBodegas);
 
 expressapp.use("/productos",appProductos);
 
