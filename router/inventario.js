@@ -17,46 +17,34 @@ appInventarios.use((req,res,next)=>{
 });
 
 
-appInventarios.post('/', DtoInventario,(req, res) => {
-    const { id,id_producto, id_bodega, cantidad } = req.body;
-  
-    con.query(
-      'SELECT * FROM inventarios WHERE id_producto = ? AND id_bodega = ?',
-      [id_producto, id_bodega],
-      (error, results) => {
-        if (error) {
-          console.error(error);
-          res.status(500).send('Error en el servidorXD');
-        }
-        if (results.length === 0) {
-          con.query(
-            'INSERT INTO inventarios (id,id_producto, id_bodega, cantidad) VALUES (?, ?, ?,?)',
-            [id,id_producto, id_bodega, cantidad],
-            (error) => {
-              if (error) {
-                console.error(error);
-                res.status(500).send('Error en el servidorJASJSAJSA');
-              }
-               res.status(200).send('Registro insertado exitosamente');
-            }
-          );
-        } else {
-          const existingQuantity = results[0].cantidad;
-          const newQuantity = existingQuantity + cantidad;
-          con.query(
-            'UPDATE inventarios SET cantidad = ? WHERE id_producto = ? AND id_bodega = ?',
-            [newQuantity, id_producto, id_bodega],
-            (error) => {
-              if (error) {
-                console.error(error);
-                res.status(500).send('Error en el servidor IDK');
-              }
-                res.status(200).send('Registro actualizado exitosamente');
-            }
-          );
-        }
+appInventarios.post("/", DtoInventario, (req, res) => {
+  const { id_producto, id_bodega, cantidad } = req.body;
+  const datos = Object.values(req.body);
+  con.query(
+    `SELECT * FROM inventarios WHERE id_bodega = ? AND id_producto = ?`,
+    [id_bodega, id_producto],
+    (err, data, fill) => {
+      if (data.length === 0) {
+        con.query(
+          `INSERT INTO inventarios (id,id_bodega,id_producto,cantidad,created_by,updated_by, created_at, updated_at, deleted_at) VALUES (?,?,?,?,?,?,?,?,?)`,
+          datos,
+          (err, data, fill) => {
+            res.send("DATA INSERTED-> " + datos);
+          }
+        );
+      } else {
+        const cantidadActual = data[0].cantidad;
+        const cantidadNueva = cantidadActual + cantidad;
+        conn.query(
+          `UPDATE FROM inventarios SET cantidad = ? WHERE id_producto = ? AND id_bodega = ?`,
+          [cantidadNueva, id_producto, id_bodega],
+          (err, data, fill) => {
+            res.send("DATA UPDATED (nueva cantidad)-> " + cantidadNueva);
+          }
+        );
       }
-    );
-  });
+    }
+  );
+});
 
 export default appInventarios;

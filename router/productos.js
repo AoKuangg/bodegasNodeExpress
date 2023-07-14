@@ -70,5 +70,35 @@ appProductos.post("/",DtoProductos ,(req, res) => {
   });
 
 
+appProductos.put("/",DtoProductos,(req,res) => {
+  const { id_producto, cantidad, id_bodegaOrigen, id_bodegaDestino } = req.body;
+  con.query(
+    `SELECT cantidad FROM inventarios WHERE id_producto = ? AND id_bodega = ?`,
+    [id_producto, id_bodegaOrigen],
+    (err, data, fil) => {
+      const cantidadDisponible = data[0].cantidad;
+      if (cantidad > cantidadDisponible) {
+        res.send("No esta disponible esa cantidad");
+      } else {
+        // Restar la cantidad de la bodega de origen
+        con.query(
+          `UPDATE inventarios SET cantidad = cantidad - ? WHERE id_producto = ? AND id_bodega = ?`,
+          [cantidad, id_producto, id_bodegaOrigen]
+        );
+
+        // Sumar la cantidad a la bodega de destino
+        con.query(
+          `UPDATE inventarios SET cantidad = cantidad + ? WHERE id_producto = ? AND id_bodega = ?`,
+          [cantidad, id_producto, id_bodegaDestino]
+        );
+        res.send("Update");
+      }
+    }
+  );
+});
+
+
+
+
 
 export default appProductos;
