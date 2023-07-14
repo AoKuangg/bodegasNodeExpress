@@ -1,6 +1,7 @@
 import {Router} from "express";
 import mysql from "mysql2";
 import dotenv from "dotenv";
+import DtoProductos from "../Middleware/DTOProductos.js";
 const appProductos = Router();
 dotenv.config();
 
@@ -28,7 +29,7 @@ appProductos.get("/",(req,res)=>{
     })
 });
 
-appProductos.post("/", (req, res) => {
+appProductos.post("/",DtoProductos ,(req, res) => {
     const { id,nombre,  descripcion,cantidad ,id_inv} = req.body;
     con.query(
       "INSERT INTO productos (id, nombre, descripcion) VALUES (?,?, ?)",
